@@ -1,0 +1,82 @@
+<robot xmlns:ns0="http://ros.org/wiki/xacro">
+
+
+<ns0:include filename="$(find one_dynamixel_simulation)/urdf/one_dynamixel_simulation.material.xacro" />
+
+  <joint name="origin_to_link1" type="fixed">
+    <parent link="world" />
+    <child link="link1" />
+    <axis xyz="0 0 1" />
+    <origin xyz="0 0 0.07" rpy="0 0 0" />
+  </joint>
+
+  
+  <link name="link1">
+    <visual>
+      <origin xyz="0 0 0" rpy="${pi/2} 0 0" />
+      <geometry>
+        <mesh filename="file://$(find one_dynamixel_simulation)/meshes/mx-28at_ar.stl" scale="0.001 0.001 0.001" />
+      </geometry>
+      <material name="grey" />
+    </visual>
+
+    <collision>
+      <origin xyz="0 0 0" rpy="${pi/2} 0 0" />
+      <geometry>
+        <mesh filename="file://$(find one_dynamixel_simulation)/meshes/mx-28at_ar.stl" scale="0.001 0.001 0.001" />
+      </geometry>
+    </collision>
+
+    <inertial>
+      <origin xyz="0.2407e-03 -12.903e-03 0.5949e-03" />
+      <mass value="0.075" />
+      <inertia ixx="22649.62e-06" ixy="36.779e-06" ixz="-213.05e-06" iyy="12868.3e-06" iyz="-1145.65e-06" izz="17733.142e-06" />
+    </inertial>
+  </link>
+  <gazebo reference="link1">
+        <material>Gazebo/Grey</material>
+  </gazebo>
+  
+  <joint name="joint1" type="revolute">
+    <parent link="link1" />
+    <child link="link2" />
+    <origin xyz="0.0 -0.03 0.0" rpy="0 0 0" />
+    <axis xyz="0 -1 0" />
+    <limit velocity="5.76" effort="2.5" lower="-${pi}" upper="${pi}" />
+    <dynamics damping="2.825" friction="2.788" />
+  </joint>
+  <gazebo reference="joint1">
+      <implicitSpringDamper>true</implicitSpringDamper>
+      <springStiffness>0.5</springStiffness>
+      <springReference>0.061</springReference>
+      <stopErp>0.7</stopErp>
+      <stopCfm>0.45</stopCfm>
+  </gazebo>
+  
+  <link name="link2">
+    <visual>
+      <origin xyz="0 0 0" rpy="${pi} 0 0" />
+      <geometry>
+        <mesh filename="file://$(find one_dynamixel_simulation)/meshes/hn07-n101.stl" scale="0.001 0.001 0.001" />
+      </geometry>
+      <material name="grey" />
+    </visual>
+    
+    <collision>
+      <origin xyz="0 0 0" rpy="${pi} 0 0" />
+      <geometry>
+        <mesh filename="file://$(find one_dynamixel_simulation)/meshes/hn07-n101.stl" scale="0.001 0.001 0.001" />
+      </geometry>
+    </collision>
+
+     <inertial>
+      <origin xyz="0 0 0" />
+      <mass value="0.003" />
+      <inertia ixx="0.0000003025" ixy="0.0" ixz="0.0" iyy="0.0000003025" iyz="0.0" izz="0.00000031" />
+    </inertial>
+  </link>
+  <gazebo reference="link2">
+        <material>Gazebo/Grey</material>
+  </gazebo>
+
+</robot>

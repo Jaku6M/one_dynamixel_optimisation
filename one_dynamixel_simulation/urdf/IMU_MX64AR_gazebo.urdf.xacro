@@ -1,0 +1,9 @@
+<?xml version="1.0"?>
+<robot name="one_dynamixel_simulation" xmlns:xacro="http://ros.org/wiki/xacro">
+  <xacro:include filename="$(find one_dynamixel_simulation)/urdf/IMU_MX64AR.xacro" />
+  <xacro:include filename="$(find one_dynamixel_simulation)/urdf/IMU_MX64AR.ros2_control_gazebo.xacro" />
+
+  <link name="world"/>
+
+  <xacro:one_dynamixel_simulation_ros2_control name="one_dynamixel_simulation_ros2_control" />
+</robot>

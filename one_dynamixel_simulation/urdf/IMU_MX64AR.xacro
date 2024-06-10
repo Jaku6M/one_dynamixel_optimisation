@@ -1,0 +1,118 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://ros.org/wiki/xacro">
+
+<!-- Import Rviz colors -->
+<xacro:include filename="$(find one_dynamixel_simulation)/urdf/one_dynamixel_simulation.material.xacro" />
+
+  <joint name="origin_to_link1" type="fixed">
+    <parent link="world" />
+    <child link="link1" />
+    <axis xyz="0 0 1" />
+    <origin xyz="0 0 0.07" rpy="0 0 0" />
+  </joint>
+
+  <!-- Link 1 -->
+  <link name="link1">
+    <visual>
+      <origin xyz="0 0 0" rpy="${pi/2} 0 0"/>
+      <geometry>
+        <mesh filename="file://$(find one_dynamixel_simulation)/meshes/mx-64at_ar.stl" scale="0.001 0.001 0.001"/>
+      </geometry>
+      <material name="grey"/>
+    </visual>
+
+    <collision>
+      <origin xyz="0 0 0" rpy="${pi/2} 0 0"/>
+      <geometry>
+        <mesh filename="file://$(find one_dynamixel_simulation)/meshes/mx-64at_ar.stl" scale="0.001 0.001 0.001"/>
+      </geometry>
+    </collision>
+
+    <inertial>
+      <origin xyz="0.1583e-03 -17.0242e-03 1.6784e-03" />
+      <mass value="0.1295" />
+      <inertia ixx="56457.58e-06" ixy="-652.34e-06" ixz="646.99e-06"
+               iyy="29325.73e-06" iyz="-5892.95e-06"
+               izz="45111.81e-06" />
+    </inertial>
+  </link>
+  <gazebo reference="link1">
+        <material>Gazebo/Grey</material>
+  </gazebo>
+  <!-- Joint 1 -->
+  <joint name="joint1" type="revolute">
+    <parent link="link1"/>
+    <child link="link2"/>
+    <origin xyz="0.0 0.0 0.0" rpy="0 0 0"/>
+    <axis xyz="0 -1 0"/>
+    <limit velocity="6.597" effort="6.0" lower="-${pi}" upper="${pi}" />
+    <dynamics damping="1.45" friction="1.2"/>
+  </joint>
+  <gazebo reference="joint1">
+      <implicitSpringDamper>true</implicitSpringDamper>
+      <springStiffness>0.5</springStiffness>
+      <springReference>0.01</springReference>
+      <stopErp>0.7</stopErp>
+      <stopCfm>0.45</stopCfm>
+  </gazebo>
+  <!--  Link 2 -->
+  <link name="link2">
+    <visual>
+      <origin xyz="0 0 128e-3" rpy="0 0 0"/>
+      <geometry>
+        <mesh filename="file://$(find one_dynamixel_simulation)/meshes/Right-Shank.stl"/>
+      </geometry>
+      <material name="grey"/>
+    </visual>
+    
+    <collision>
+      <origin xyz="0 0 128e-3" rpy="0 0 0"/>
+      <geometry>
+        <mesh filename="file://$(find one_dynamixel_simulation)/meshes/Right-Shank-Collision.stl"/>
+      </geometry>
+    </collision>
+
+    <inertial>
+        <origin xyz="4.836e-3	-2.813e-3	-60.226e-3" rpy="0 0 0"/>
+        <mass value="0.059"/>
+        <inertia ixx="128.748e-6" iyy="106.103e-6" izz="37.097e-6" ixy="-0.804e-6" ixz="-3.208e-6"  iyz="-0.627e-6" />
+    </inertial>
+  </link>
+  <gazebo reference="link2">
+        <material>Gazebo/Grey</material>
+  </gazebo>
+
+   <joint name="imu_sensor_joint" type="fixed">
+        <origin xyz="${31.505-0.790}e-3 ${-40.249+39.898}e-3 ${128-(-231.798+278.063)}e-3" rpy="${pi/2} 0.8727 ${pi/2}"/>
+        <parent link="link2"/>
+        <child link="imu"/>
+    </joint>
+     
+    <link name="imu">
+        <collision>
+            <origin xyz="0.0 0.0 0.0" rpy="0 0 0"/>
+            <geometry>
+                <box size="0.021 0.014 0.009"/>
+            </geometry>
+        </collision>
+        <visual>
+            <origin xyz="0.0 0.0 0.0"  rpy="0 0 0"/>
+            <geometry>
+                <box size="0.021 0.014 0.009"/>
+            </geometry>
+        </visual>
+        <inertial>
+            <mass value="0.009" />
+            <origin xyz="0 0 0" rpy="0 0 0"/>
+            <inertia ixx="147.609e-9" ixy="0" ixz="0" iyy="331.362e-9" iyz="0" izz="477.747e-9" />
+        </inertial>
+    </link>
+    <gazebo reference="imu">
+        <material>Gazebo/Black</material>
+        <gravity>true</gravity>
+        <sensor name="MPU6050sensor" type="imu">
+            <always_on>1</always_on>
+            <update_rate>20.0</update_rate>
+        </sensor>
+    </gazebo>
+</robot>
